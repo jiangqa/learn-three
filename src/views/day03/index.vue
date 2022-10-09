@@ -4,7 +4,7 @@ import { onMounted } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 // 初始化场景
 const scene = new THREE.Scene()
-
+scene.background = new THREE.Color(0x999999)
 //初始化相机
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000)
 //设置相机位置
@@ -29,11 +29,12 @@ const axesHelper = new THREE.AxesHelper(5)
 scene.add(axesHelper)
 
 const group = new THREE.Group()
+const color = new THREE.Color()
 for (let i = 0; i < 10; i++) {
   const random = Math.random() * 10
   const boxGeometry = new THREE.BoxGeometry(1, random, 1)
   const boxMaterial = new THREE.MeshBasicMaterial({
-    color: 0xffffff
+    color: color.setHex(0xffffff * Math.random())
   })
 
   const box = new THREE.Mesh(boxGeometry, boxMaterial)
@@ -47,6 +48,20 @@ for (let i = 0; i < 10; i++) {
   group.add(box)
 }
 scene.add(group)
+const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1)
+scene.add(light)
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5)
+directionalLight.castShadow = true
+directionalLight.position.set(10, 10, 10)
+scene.add(directionalLight)
+
+const planeGeometry = new THREE.BoxGeometry(20, 1, 20)
+const planeMaterial = new THREE.MeshBasicMaterial({
+  color: 0x888888
+})
+const plane = new THREE.Mesh(planeGeometry, planeMaterial)
+plane.position.set(5, -0.5, 5)
+scene.add(plane)
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
