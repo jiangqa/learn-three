@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap'
 import useFullScreen from '../../use/useFullScreen'
+import a from './texture/a.jpg'
 const { fullScreen } = useFullScreen()
 //创建场景
 const scene = new THREE.Scene()
@@ -13,8 +14,15 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.z = 5
 //创建几何体
 const geometry = new THREE.BoxGeometry(1, 1, 1)
+
+//纹理
+const texture = new THREE.TextureLoader().load(a)
+
 //创建材质
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+const material = new THREE.MeshBasicMaterial({
+  // color: 0x00ff00,
+  map: texture
+})
 // 几何体添加材质
 const cube = new THREE.Mesh(geometry, material)
 //坐标系 红色代表 X 轴. 绿色代表 Y 轴. 蓝色代表 Z 轴.
@@ -29,7 +37,7 @@ renderer.setSize(window.innerWidth, window.innerHeight)
 //创建轨道控制器 机围绕目标进行轨道运动
 const controls = new OrbitControls(camera, renderer.domElement)
 // const clock = new THREE.Clock()
-const animation = gsap.to(cube.position, {
+gsap.to(cube.position, {
   x: 5, //需要改变的参数
   duration: 2, //动画时间
   ease: 'power1.inOut', //动画速度曲线
