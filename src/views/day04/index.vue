@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { onMounted } from 'vue'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { OimoPhysics } from 'three/examples/jsm/physics/OimoPhysics'
+import Stats from 'three/examples/jsm/libs/stats.module.js'
 
 // 初始化场景
 const scene = new THREE.Scene()
@@ -68,7 +69,6 @@ for (let i = 0; i < spheres.count; i++) {
   spheres.setMatrixAt(i, matrix)
   spheres.setColorAt(i, color.setHex(0xffffff * Math.random()))
 }
-
 //初始化渲染器
 const renderer = new THREE.WebGLRenderer({
   // 设置抗锯齿
@@ -88,19 +88,38 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight)
 })
 const controls = new OrbitControls(camera, renderer.domElement)
+const stats = new Stats()
+const position = new THREE.Vector3()
+let physics
 
 const render = () => {
   renderer.render(scene, camera)
   requestAnimationFrame(render)
+  let index = Math.floor(Math.random() * boxes.count)
+
+  position.set(Math.random() - 0.5, Math.random() * 2, Math.random() - 0.5)
+  physics.setMeshPosition(boxes, position, index)
+
+  //
+
+  index = Math.floor(Math.random() * spheres.count)
+
+  position.set(Math.random() - 0.5, Math.random() + 1, Math.random() - 0.5)
+  physics.setMeshPosition(spheres, position, index)
+
+  renderer.render(scene, camera)
+
+  stats.update()
   controls.update()
 }
 onMounted(async () => {
-  const physics = await OimoPhysics()
+  physics = await OimoPhysics()
   physics.addMesh(floor)
   physics.addMesh(spheres, 1)
   physics.addMesh(boxes, 1)
   const dom = document.getElementById('day01')
   dom?.appendChild(renderer.domElement)
+  document.body.appendChild(stats.dom)
   render()
 })
 </script>
