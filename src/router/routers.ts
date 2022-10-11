@@ -17,6 +17,11 @@ export default [
   {
     name: 'day04',
     path: '/day04',
-    component: () => import('../views/day04/index.vue')
+    component: () => import('../views/day04/index1.vue')
+  },
+  {
+    name: 'day05',
+    path: '/day05',
+    component: () => import('../views/day05/index.vue')
   }
 ]
