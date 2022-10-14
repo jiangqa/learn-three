@@ -92,7 +92,7 @@ const loader = new GLTFLoader()
 // 实例化draco载入库
 const dracoLoader = new DRACOLoader()
 // 添加draco载入库
-dracoLoader.setDecoderPath(new URL('./draco/', import.meta.url).href)
+dracoLoader.setDecoderPath('./libs/draco/gltf/')
 // 添加draco载入库
 loader.setDRACOLoader(dracoLoader)
 
